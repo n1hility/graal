@@ -24,6 +24,7 @@
  */
 package com.oracle.svm.hosted;
 
+import static com.oracle.svm.core.SubstrateOptions.SpawnIsolates;
 import static org.graalvm.compiler.options.OptionType.Debug;
 import static org.graalvm.compiler.options.OptionType.User;
 
@@ -58,7 +59,14 @@ public class NativeImageOptions {
     @APIOption(name = "shared", fixedValue = {"SHARED_LIBRARY"}, customHelp = "build shared library")//
     @APIOption(name = "static", fixedValue = {"STATIC_EXECUTABLE"}, customHelp = "build statically linked executable (requires static libc and zlib)")//
     @Option(help = "Generate a SHARED_LIBRARY, EXECUTABLE or STATIC_EXECUTABLE image")//
-    public static final HostedOptionKey<String> Kind = new HostedOptionKey<>(AbstractBootImage.NativeImageKind.EXECUTABLE.name());
+    public static final HostedOptionKey<String> Kind = new HostedOptionKey<String>(AbstractBootImage.NativeImageKind.EXECUTABLE.name()) {
+        @Override
+        protected void onValueUpdate(EconomicMap<OptionKey<?>, Object> values, String oldValue, String newValue) {
+            if ("SHARED_LIBRARY".equals(newValue) && !values.containsKey(SpawnIsolates)) {
+                SpawnIsolates.update(values, true);
+            }
+        }
+    };
 
     @Option(help = "Comma separated list of CPU features that will be used for image generation on the AMD64 platform. " +
                     "Features SSE and SSE2 are enabled by default. Other available features are: " +
