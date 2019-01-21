@@ -118,6 +118,9 @@ public class SubstrateOptions {
     @Option(help = "Use only a writable native image heap.")//
     public static final HostedOptionKey<Boolean> UseOnlyWritableBootImageHeap = new HostedOptionKey<>(false);
 
+    @Option(help = "Enables usage of copy-on-write isolate heaps if supported by the underlying platform.")
+    public static final HostedOptionKey<Boolean> UseCOWIsolateHeaps = new HostedOptionKey<>(true);
+
     @Option(help = "Support multiple isolates. ")//
     public static final HostedOptionKey<Boolean> SpawnIsolates = new HostedOptionKey<>(true);
 
