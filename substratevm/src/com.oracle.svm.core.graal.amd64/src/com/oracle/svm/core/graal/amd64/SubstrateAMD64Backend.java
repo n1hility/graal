@@ -823,7 +823,7 @@ public class SubstrateAMD64Backend extends SubstrateBackend implements LIRGenera
     }
 
     private static boolean useLinearPointerCompression() {
-        return SubstrateOptions.SpawnIsolates.getValue();
+        return SubstrateOptions.UseCompressedReferences.getValue();
     }
 
     @Override

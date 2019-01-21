@@ -121,8 +121,18 @@ public class SubstrateOptions {
     @Option(help = "Enables usage of copy-on-write isolate heaps if supported by the underlying platform.")
     public static final HostedOptionKey<Boolean> UseCOWIsolateHeaps = new HostedOptionKey<>(true);
 
+    @Option(help = "Use compressed references.")//
+    public static final HostedOptionKey<Boolean> UseCompressedReferences = new HostedOptionKey<>(true);
+
     @Option(help = "Support multiple isolates. ")//
-    public static final HostedOptionKey<Boolean> SpawnIsolates = new HostedOptionKey<>(true);
+    public static final HostedOptionKey<Boolean> SpawnIsolates = new HostedOptionKey<Boolean>(true) {
+        @Override
+        protected void onValueUpdate(EconomicMap<OptionKey<?>, Object> values, Boolean oldValue, Boolean newValue) {
+            if (newValue) {
+                UseCompressedReferences.update(values, true);
+            }
+        }
+    };
 
     @Option(help = "Trace VMOperation execution.")//
     public static final RuntimeOptionKey<Boolean> TraceVMOperations = new RuntimeOptionKey<>(false);

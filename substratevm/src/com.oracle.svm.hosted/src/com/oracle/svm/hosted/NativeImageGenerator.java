@@ -373,7 +373,7 @@ public class NativeImageGenerator {
                 architecture = new AMD64(features, SubstrateTargetDescription.allFlags());
             }
             assert architecture instanceof AMD64 : "SVM supports only AMD64 architectures.";
-            boolean inlineObjects = SubstrateOptions.SpawnIsolates.getValue();
+            boolean inlineObjects = SubstrateOptions.UseCompressedReferences.getValue();
             return new SubstrateTargetDescription(architecture, true, 16, 0, inlineObjects);
         } else {
             throw UserError.abort("Architecture specified by platform is not supported: " + platform.getClass().getTypeName());
@@ -1074,7 +1074,7 @@ public class NativeImageGenerator {
         }
 
         BytecodeProvider replacementBytecodeProvider = replacements.getDefaultReplacementBytecodeProvider();
-        final boolean explicitUnsafeNullChecks = SubstrateOptions.SpawnIsolates.getValue();
+        final boolean explicitUnsafeNullChecks = SubstrateOptions.UseCompressedReferences.getValue();
         registerInvocationPlugins(providers.getMetaAccess(), providers.getSnippetReflection(), plugins.getInvocationPlugins(), replacementBytecodeProvider, !hosted, explicitUnsafeNullChecks);
         AMD64GraphBuilderPlugins.register(plugins, replacementBytecodeProvider, (AMD64) ConfigurationValues.getTarget().arch, true, explicitUnsafeNullChecks);
 

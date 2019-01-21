@@ -341,7 +341,7 @@ public abstract class NativeBootImage extends AbstractBootImage {
 
             long roSectionSize = roConstantsSize;
             long rwSectionSize = cglobalsSize;
-            if (!SubstrateOptions.SpawnIsolates.getValue()) {
+            if (!SubstrateOptions.UseCompressedReferences.getValue()) {
                 roSectionSize += heap.getReadOnlySectionSize();
                 rwSectionSize += heap.getWritableSectionSize();
             }
@@ -376,7 +376,7 @@ public abstract class NativeBootImage extends AbstractBootImage {
 
             final RelocatableBuffer heapSectionBuffer;
             final ProgbitsSectionImpl heapSectionImpl;
-            if (SubstrateOptions.SpawnIsolates.getValue()) {
+            if (SubstrateOptions.UseCompressedReferences.getValue()) {
                 boolean writable = !SubstrateOptions.SpawnIsolates.getValue();
                 final long heapSize = heap.getReadOnlySectionSize() + heap.getWritableSectionSize();
 
@@ -415,7 +415,7 @@ public abstract class NativeBootImage extends AbstractBootImage {
             defineDataSymbol(CGlobalDataInfo.CGLOBALDATA_BASE_SYMBOL_NAME, rwDataSection, RWDATA_CGLOBALS_PARTITION_OFFSET);
 
             // - Write the heap, either to its own section, or to the ro and rw data sections.
-            if (SubstrateOptions.SpawnIsolates.getValue()) {
+            if (SubstrateOptions.UseCompressedReferences.getValue()) {
                 heap.writeHeap(debug, heapSectionBuffer, heapSectionBuffer);
 
                 long firstRelocOffset = heap.getFirstRelocatablePointerOffsetInSection();
